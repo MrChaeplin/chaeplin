@@ -1,18 +1,12 @@
-from exchange.binance import (
-    BinanceAPI,
-    BinanceFutures,
-    BinanceSpot,
-)
-from exchange.binance.symbols import BTC, ETH
-from exchange.binance import backtest, abstract
+from .api import BinanceAPI
+from .spot import BinanceSpot
+from .futures import BinanceFutures
+from .symbols import BTC, ETH
 
 __all__ = [
     "BinanceAPI",
-    "Symbols",
-    "BinanceFutures",
     "BinanceSpot",
-    "backtest",
-    "abstract",
+    "BinanceFutures",
     "BTC",
     "ETH",
 ]
