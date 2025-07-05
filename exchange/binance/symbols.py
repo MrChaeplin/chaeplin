@@ -1,4 +1,4 @@
-from .binance import BinanceAPI
+from .api import BinanceAPI
 
 
 class SymbolTrader:
