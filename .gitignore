@@ -11,21 +11,20 @@ data/
 *.log
 logs/
 
-utils/
-
 config/
 
 test_log.py
 
-Dokerfile
+Dockerfile
 .dockerignore
 
 .vscode/
+.idea/
 
 exchange/binance/config.py
 
 __pycache__/
 
-tests/test_config.py
-tests/
-.pytest_cache
+tests/logs/
+!tests/logs/.gitkeep
+.pytest_cache/
