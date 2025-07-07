@@ -21,8 +21,6 @@ Dockerfile
 .vscode/
 .idea/
 
-exchange/binance/config.py
-
 __pycache__/
 
 tests/logs/
