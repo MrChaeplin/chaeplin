@@ -1,7 +1,8 @@
 from exchange.binance.api import BinanceAPI
 
 
-class BinanceFutures(BinanceAPI):
+class BinanceFutures(BinanceAPI):  # raw wrapper
+
     def __init__(self):
         super().__init__("future")
 
@@ -11,6 +12,30 @@ class BinanceFutures(BinanceAPI):
             {
                 "symbol": symbol.replace("/", ""),
                 "leverage": leverage,
+            }
+        )
+
+    def set_margin_type(self, symbol: str, margin_mode: str):
+        """
+        Set margin type for a futures symbol
+        margin_mode: 'ISOLATED' or 'CROSSED'
+        """
+        return self._get_api().fapiPrivate_post_marginType(
+            {
+                "symbol": symbol.replace("/", ""),
+                "marginType": margin_mode.upper(),
+            }
+        )
+
+    def set_position_mode(self, hedge: bool):
+        """
+        Set position mode for the entire futures account
+        hedge=True  -> Hedge Mode (롱/숏 동시 보유)
+        hedge=False -> One-Way Mode (단일 방향)
+        """
+        return self._get_api().fapiPrivate_post_positionSideDual(
+            {
+                "dualSidePosition": str(hedge).lower(),
             }
         )
 
@@ -64,3 +89,51 @@ class BinanceFutures(BinanceAPI):
     def take_profit(self):
         """Take profit order (Not implemented) // 익절 주문 (미구현)"""
         pass
+
+
+class FuturesTrader:
+    def __init__(self, api: BinanceFutures, symbol: str):
+        """
+        :param api: BinanceFutures instance
+        :param symbol: Trading Symbol (e.g. "BTC/USDT")
+        """
+        self.api = api
+        self.symbol = symbol
+
+    def fetch_ohlcv(self, timeframe="1m", limit=60):
+        """
+        Fetch OHLCV for this symbol
+        :param timeframe: "1m", "5m", "1h", "4h" . . .
+        :param limit: 불러올 캔들 개수
+        """
+        return self.api._get_api().fetch_ohlcv(
+            self.symbol, timeframe=timeframe, limit=limit
+        )
+
+    def set_margin_type(self, mode: str):
+        """
+        Switch margin mode for this symbol
+        :param mode: "isolated" 또는 "crossed"
+        """
+        return self.api.set_margin_type(self.symbol, mode)
+
+    def buy_market(self, amount: float):
+        """
+        Convenience method: buy long market price
+        :param amount: buying amount
+        """
+        return self.api.buy_market(self.symbol, amount)
+
+
+class BTCFutures(FuturesTrader):
+    """FuturesTrader for BTC/USDT only"""
+
+    def __init__(self, api: BinanceFutures):
+        super().__init__(api, "BTC/USDT")
+
+
+class ETHFutures(FuturesTrader):
+    """FuturesTrader for ETH/USDT only"""
+
+    def __init__(self, api: BinanceFutures):
+        super().__init__(api, "ETH/USDT")
