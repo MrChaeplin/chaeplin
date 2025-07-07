@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 from exchange.binance.spot import BinanceSpot
 
 
-@patch("exchange.binance.spot.BinanceSpot.get_api")
+@patch("exchange.binance.spot.BinanceSpot._get_api")
 def test_buy_market(mock_get_api):
     mock_api = MagicMock()
     mock_api.create_order.return_value = {"status": "success"}
@@ -17,7 +17,7 @@ def test_buy_market(mock_get_api):
     assert result["status"] == "success"
 
 
-@patch("exchange.binance.spot.BinanceSpot.get_api")
+@patch("exchange.binance.spot.BinanceSpot._get_api")
 def test_buy_limit(mock_get_api):
     mock_api = MagicMock()
     mock_api.create_order.return_value = {"status": "success"}
@@ -32,7 +32,7 @@ def test_buy_limit(mock_get_api):
     assert result["status"] == "success"
 
 
-@patch("exchange.binance.spot.BinanceSpot.get_api")
+@patch("exchange.binance.spot.BinanceSpot._get_api")
 def test_sell_market(mock_get_api):
     mock_api = MagicMock()
     mock_api.create_order.return_value = {"status": "success"}
@@ -45,7 +45,7 @@ def test_sell_market(mock_get_api):
     assert result["status"] == "success"
 
 
-@patch("exchange.binance.spot.BinanceSpot.get_api")
+@patch("exchange.binance.spot.BinanceSpot._get_api")
 def test_sell_limit(mock_get_api):
     mock_api = MagicMock()
     mock_api.create_order.return_value = {"status": "success"}

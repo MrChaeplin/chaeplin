@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 from exchange.binance.futures import BinanceFutures
 
 
-@patch("exchange.binance.futures.BinanceFutures.get_api")
+@patch("exchange.binance.futures.BinanceFutures._get_api")
 def test_long_market(mock_get_api):
     mock_api = MagicMock()
     mock_api.create_order.return_value = {"status": "success"}
@@ -17,7 +17,7 @@ def test_long_market(mock_get_api):
     mock_api.create_order.assert_called_with("BTC/USDT", "market", "buy", 0.01)
 
 
-@patch("exchange.binance.futures.BinanceFutures.get_api")
+@patch("exchange.binance.futures.BinanceFutures._get_api")
 def test_sell_market(mock_get_api):
     mock_api = MagicMock()
     mock_api.create_order.return_value = {"status": "success"}
@@ -29,7 +29,7 @@ def test_sell_market(mock_get_api):
     mock_api.create_order.assert_called_with("BTC/USDT", "market", "sell", 0.02)
 
 
-@patch("exchange.binance.futures.BinanceFutures.get_api")
+@patch("exchange.binance.futures.BinanceFutures._get_api")
 def test_set_leverage(mock_get_api):
     mock_api = MagicMock()
     mock_api.fapiprivate_post_leverage.return_value = {"leverage": 10}
