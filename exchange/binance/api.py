@@ -8,11 +8,11 @@ class BinanceAPI(AbstractAPI):
         if market_type not in ("spot", "future"):
             raise ValueError(f"Invalid market_type: {market_type}")
 
-        self.api_key = binance_instance.api_key
-        self.api_secret = binance_instance.api_secret
+        self.__api_key = binance_instance.get_api_key()
+        self.__api_secret = binance_instance.get_api_secret()
         self.market_type = market_type
 
-        self.api = self._create_api()
+        self._api = self._create_api()
 
     def _create_api(self):
         options = {
@@ -22,8 +22,8 @@ class BinanceAPI(AbstractAPI):
 
         return ccxt.binance(
             {
-                "apiKey": self.api_key,
-                "secret": self.api_secret,
+                "apiKey": self.__api_key,
+                "secret": self.__api_secret,
                 "enableRateLimit": True,
                 "adjustForTimeDifference": True,
                 "verbose": False,  # HTTP log
@@ -33,20 +33,20 @@ class BinanceAPI(AbstractAPI):
 
     @classmethod
     def binance_spot(cls):
-        return cls("spot").get_api()
+        return cls("spot")._get_api()
 
     @classmethod
     def binance_futures(cls):
-        return cls("future").get_api()
+        return cls("future")._get_api()
 
-    def get_api(self):
-        return self.api
+    def _get_api(self):
+        return self._api
 
     def fetch_ticker(self, symbol: str):
-        return self.get_api().fetch_ticker(symbol)
+        return self._get_api().fetch_ticker(symbol)
 
     def create_order(self, symbol: str, order_type: str, side: str, amount: float):
-        return self.get_api().create_order(symbol, order_type, side, amount)
+        return self._get_api().create_order(symbol, order_type, side, amount)
 
     def fetch_balance(self):
-        return self.get_api().fetch_balance()
+        return self._get_api().fetch_balance()
