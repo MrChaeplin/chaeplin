@@ -1,6 +1,6 @@
 import ccxt
 from exchange.binance.config import binance_instance
-from exchange.abstract import AbstractAPI
+from exchange.base.abstract_api import AbstractAPI
 
 
 class BinanceAPI(AbstractAPI):
@@ -45,8 +45,21 @@ class BinanceAPI(AbstractAPI):
     def fetch_ticker(self, symbol: str):
         return self._get_api().fetch_ticker(symbol)
 
-    def create_order(self, symbol: str, order_type: str, side: str, amount: float):
-        return self._get_api().create_order(symbol, order_type, side, amount)
+    def create_order(
+        self,
+        symbol: str,
+        order_type: str,
+        side: str,
+        amount: float,
+        price: float = None,
+        params: dict = None,
+    ):
+        return self._get_api().create_order(
+            symbol, order_type, side, amount, price=price, params=params
+        )
 
     def fetch_balance(self):
         return self._get_api().fetch_balance()
+
+    def cancel_order(self, order_id: str, symbol: str = None):
+        return self._get_api().cancel_order(order_id, symbol)
