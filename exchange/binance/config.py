@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 
-def load_binance_config():
+def load_binance_config(dotenv_path=None, override=False):
     env_path = Path(__file__).parents[2] / ".env"
     load_dotenv(dotenv_path=env_path)
 
